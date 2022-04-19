@@ -8,20 +8,35 @@ class MaxHeap:
     def __init__(self):
         self.heap = []
 
-    def buildMaxHeap(self, list):
+    def buildMinHeap(self, list):
+        # for each date
         for date in list:
-            if self.heap.size() == 0:
-                self.heap.append(date)
+            #if the heap is empty, add the first one
+            self.heap.append(date)
+            if len(self.heap) == 0:
                 continue
-            childLocation = self.heap.size()-1
-            parentLocation = (childLocation-1)/2
-                
+            # if heap is not empty, add new date as a child and switch
+            # with parent if needed. call min heapify if it is the 4th or 5th date
+            childLocation = len(self.heap)-1
+            self.minHeapify(childLocation)
 
-    def mexHeapifyHelper(self):
-        return
+    def minHeapify(self, childLocation):
+        parentLocation = math.floor((childLocation-1)/2)
+        #if the child is less than the parent
+        if self.heap[childLocation].percent < self.heap[parentLocation].percent:
+            temp = self.heap[parentLocation]
+            self.heap[parentLocation] = self.heap[childLocation]
+            self.heap[childLocation] = temp
+            # check if root is still less than new child
+            rootLocation = math.floor((parentLocation-1)/2)
+            if rootLocation < 0:
+                return
+            else:
+                self.minHeapify(parentLocation)
 
-    def maxHeapify(self):
-        firstParent = self.heap[math.floor(self.heap.size/2)]
+    def compare(self, newDate, parent = 0):
+        if self
+        
 
 
 maxHeap = MaxHeap()
@@ -48,6 +63,8 @@ def buildDate(dataArray):
     month = dateList[1]
     day = dateList[2]
     return Date(month, day, year, dataArray[1], dataArray[4])
+
+# ------------------------------------- READING CSV -------------------------------------
 
 # csv file name
 filename = "./Stocks/aapl.us.txt"
@@ -83,7 +100,10 @@ for row in rows[:5]:
     print('\n')
 
 
-# --------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
+
+#building min heap with first 5 nodes
+maxHeap.buildMinHeap(firstFiveDates)
 
 #printing heap
 for date in maxHeap.heap:
