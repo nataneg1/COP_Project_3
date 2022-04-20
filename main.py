@@ -5,7 +5,12 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     # TODO: Build Tree
+    list = []
     return render_template("index.html")
+
+@app.route('/results')
+def result():
+    return "Hello World!"
 
 if __name__ == '__main__':
     app.run(debug=True)
