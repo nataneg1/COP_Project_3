@@ -24,37 +24,62 @@ class DateRange(enum.Enum):
     month = 3
     year = 4
 
+class GainOrLossChoice(enum.Enum):
+    gain = 1
+    loss = 0
+
 class Date:
-    def __init__(self, m, d, y, o, c):
+    def __init__(self, m, d, y, o, c, gainOrLoss):
         self.month = m
         self.day = d
         self.year = y
         self.open = float(o)
         self.close = float(c)
-        self.percent = round(((self.close-self.open)/self.open)*100, 3)
+        self.gainOrLoss = gainOrLoss
+        self.percent = self.setPercent(gainOrLoss)
+        
+    def setPercent(self, gainOrLoss):
+        percent = round(((self.close-self.open)/self.open)*100, 3)
+        if gainOrLoss == GainOrLossChoice.loss:
+            percent = percent*-1.0
+        return percent
+
 
     def printDate(self):
         print(self.month + "-" + self.day + "-" + self.year)
         print("Open: " + str(self.open))
         print("Close: " + str(self.close))
-        print("Percent: " + str(self.percent) + "%")
+        tempPercent = self.percent
+        if self.gainOrLoss == GainOrLossChoice.loss:
+            tempPercent = tempPercent*-1.0
+        print("Percent: " + str(tempPercent) + "%")
         print("\n")
 
 # Class that can represent a week, month, or year. Contains the % increase or decrease as well as start and end dates
 class DateType:
-    def __init__(self, startDate, endDate):
+    def __init__(self, startDate, endDate, gainOrLoss):
         self.startDate = startDate
         self.startPrice = float(startDate.open)
         self.endDate = endDate
         self.endPrice = float(endDate.close)
-        self.percent = round(((self.endPrice-self.startPrice)/self.startPrice)*100, 3)
+        self.gainOrLoss = gainOrLoss
+        self.percent = self.setPercent(gainOrLoss)
+    
+    def setPercent(self, gainOrLoss):
+        percent = round(((self.endPrice-self.startPrice)/self.startPrice)*100, 3)
+        if gainOrLoss == GainOrLossChoice.loss:
+            percent = percent*-1.0
+        return percent
 
     def printDateType(self):
         print("Start Date: " + self.startDate.month + "-" + self.startDate.day + "-" + self.startDate.year)
         print("End Date: " + self.endDate.month + "-" + self.endDate.day + "-" + self.endDate.year)
         print("Start Price: " + str(self.startPrice))
         print("End Price: " + str(self.endPrice))
-        print("Percent: " + str(self.percent) + "%")
+        tempPercent = self.percent
+        if self.gainOrLoss == GainOrLossChoice.loss:
+            tempPercent = tempPercent*-1.0
+        print("Percent: " + str(tempPercent) + "%")
         print("\n")
 
 # Parent: i-1/2
@@ -67,6 +92,7 @@ class MinHeap:
     def buildMinHeap(self, list):
         # for each date
         for date in list:
+            #if looking for worst year, change all signs
             #if the heap is empty, add the first one
             self.heap.append(date)
             if len(self.heap) == 0:
@@ -99,14 +125,14 @@ class MinHeap:
         if newPercent < self.heap[parentLocation].percent or newPercent == self.heap[parentLocation].percent:
             return
         # if the newDate is greater than the left root, do compare on the left root
-        if newPercent >= self.heap[leftChildLocation].percent:
+        if newPercent > self.heap[leftChildLocation].percent:
             if(leftChildLocation == 3):
                 self.heap[leftChildLocation] = newDate
                 return
             self.compare(newDate, leftChildLocation)
             return
-        # if the newDate is less than the right left, but greater than the right, replace it
-        elif newPercent >= self.heap[rightChildLocation].percent:
+        # if the newDate is less than the left, but greater than the right, replace it
+        elif newPercent > self.heap[rightChildLocation].percent:
             self.heap[rightChildLocation] = newDate
             return
         # set parent node equal to newDate
@@ -115,12 +141,12 @@ class MinHeap:
 # ===================================================== HELPER FUNCTIONS =====================================================
 minHeap = MinHeap()
 
-def buildDate(dataArray):
+def buildDate(dataArray, gainOrLoss):
     dateList = dataArray[0].split('-')
     year = dateList[0]
     month = dateList[1]
     day = dateList[2]
-    return Date(month, day, year, dataArray[1], dataArray[4])
+    return Date(month, day, year, dataArray[1], dataArray[4], gainOrLoss)
 
 def findNextDate(dateType, startDate, counter, listOfDates):
     if dateType == DateRange.day:
@@ -154,33 +180,46 @@ def findNextDate(dateType, startDate, counter, listOfDates):
             lastDateGuess = listOfDates[tempCounter]
         lastDateGuess = listOfDates[tempCounter]
         return lastDateGuess, tempCounter
+    if dateType == DateRange.year:
+        firstDateDay = startDate.day
+        firstDateMonth = startDate.month
+        firstDateYear = startDate.year
+        #estimates how many days until next new year (excluding weekends)
+        counter += int(math.ceil((5/7)*((30*(12-int(firstDateMonth))) + 30-int(firstDateDay)))) + 5
+        tempCounter = counter
+        lastDateGuess = listOfDates[counter]
+        lastDateYearGuess = int(firstDateYear) + 1
+        # if the date guess is greater than the guess, guess the day before it
+        # (int(lastDateGuess.month) != lastDateMonthGuess and int(lastDateGuess.day) < int(firstDateDay)
+        while (int(lastDateGuess.day) > 1) and int(lastDateGuess.year) == lastDateYearGuess:
+            # lastDateGuess.printDate()
+            tempCounter -= 1
+            lastDateGuess = listOfDates[tempCounter]
+        tempCounter += 1
+        lastDateGuess = listOfDates[tempCounter]
+        return lastDateGuess, tempCounter
 
 
 
-def getFirstFiveDates(dateType, dateList):
+def getFirstFiveDates(dateType, dateList, gainOrLoss):
     fiveDateList = []
+    finalCounter = 0
     if dateType == DateRange.day:
         for date in dateList[:5]:
             fiveDateList.append(date)
-    elif dateType == DateRange.week:
+    else:
         counter = 0
         while len(fiveDateList) != 5:
             firstDate = dateList[counter]
             lastDateGuess, counter = findNextDate(dateType, firstDate, counter, dateList)
-            newDateType = DateType(firstDate, lastDateGuess)
+            newDateType = DateType(firstDate, lastDateGuess, gainOrLoss)
             fiveDateList.append(newDateType)
-    elif dateType == DateRange.month:
-        counter = 0
-        while len(fiveDateList) != 5:
-            firstDate = dateList[counter]
-            lastDateGuess, counter = findNextDate(dateType, firstDate, counter, dateList)
-            newDateType = DateType(firstDate, lastDateGuess)
-            fiveDateList.append(newDateType)
-    return fiveDateList
+        finalCounter = counter
+    return fiveDateList, finalCounter
 
 
 # Goes through list of dates and orginizes them based off their dateType
-def compareDateType(dateType, listOfDates):
+def compareDateType(dateType, listOfDates, gainOrLoss):
     if dateType == DateRange.day:
         for date in listOfDates:
             minHeap.compare(date)
@@ -190,16 +229,21 @@ def compareDateType(dateType, listOfDates):
         while (counter+5) < len(listOfDates):
             firstDate = listOfDates[counter]
             lastDateGuess, counter = findNextDate(dateType, firstDate, counter, listOfDates)
-            newDateType = DateType(firstDate, lastDateGuess)
+            newDateType = DateType(firstDate, lastDateGuess, gainOrLoss)
             minHeap.compare(newDateType)
     elif dateType == DateRange.month:
         counter = 0
         while (counter+24) < len(listOfDates):
-            if counter < 0:
-                break
             firstDate = listOfDates[counter]
             lastDateGuess, counter = findNextDate(dateType, firstDate, counter, listOfDates)
-            newDateType = DateType(firstDate, lastDateGuess)
+            newDateType = DateType(firstDate, lastDateGuess, gainOrLoss)
+            minHeap.compare(newDateType)
+    elif dateType == DateRange.year:
+        counter = 0
+        while (counter+260) < len(listOfDates):
+            firstDate = listOfDates[counter]
+            lastDateGuess, counter = findNextDate(dateType, firstDate, counter, listOfDates)
+            newDateType = DateType(firstDate, lastDateGuess, gainOrLoss)
             minHeap.compare(newDateType)
     
 def printHeap(dateType):
@@ -251,7 +295,7 @@ def getTopFive(dateType, gainOrLoss, tickerName):
         dataArray = []
         for dataPoint in row:
             dataArray.append(dataPoint)
-        dateList.append(buildDate(dataArray))
+        dateList.append(buildDate(dataArray, gainOrLoss))
     for date in dateList[:5]:
         firstFiveDates.append(date)
 
@@ -260,15 +304,20 @@ def getTopFive(dateType, gainOrLoss, tickerName):
     # 1. build initial heap
     # 2. compare dates to sort through data
     # 3. return sorted array
+    print("List size: " + str(len(dateList)))
+    if(float(len(dateList)/261) < 5.0):
+        print("Too Little Data")
+        return -1
     if dateType == DateRange.day:
-        minHeap.buildMinHeap(getFirstFiveDates(dateType, dateList))
-        compareDateType(dateType, dateList)
-    elif dateType == DateRange.week:
-        minHeap.buildMinHeap(getFirstFiveDates(dateType, dateList))
-        compareDateType(dateType, dateList)
-    elif dateType == DateRange.month:
-        minHeap.buildMinHeap(getFirstFiveDates(dateType, dateList))
-        compareDateType(dateType, dateList)
+        firstFive, positionOfLastDateAdded = getFirstFiveDates(dateType, dateList, gainOrLoss)
+        minHeap.buildMinHeap(firstFive)
+        compareDateType(dateType, dateList[5:], gainOrLoss)
+    else:
+        firstFive, positionOfLastDateAdded = getFirstFiveDates(dateType, dateList, gainOrLoss)
+        minHeap.buildMinHeap(firstFive)
+        positionOfLastDateAdded += 1
+        compareDateType(dateType, dateList[positionOfLastDateAdded:], gainOrLoss)
+    
     return
 
 # #printing heap
@@ -281,8 +330,8 @@ def getTopFive(dateType, gainOrLoss, tickerName):
 # for date in dateList:
 #     maxHeap.compare(date)
 #     # date.printDate()
-dateType = DateRange.month
-getTopFive(dateType, 1, "tsla")
+dateType = DateRange.year
+getTopFive(dateType, GainOrLossChoice.loss, "aapl")
 
 print("------------------------------------------- PRINTING HEAP -------------------------------------------")
 
