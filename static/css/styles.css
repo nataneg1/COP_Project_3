@@ -63,6 +63,7 @@
     text-decoration: none;
     height: 100%;
     transition: all 0.3s ease;
+    font-size:30px;
   }
   
   .navbar__btn {
@@ -92,7 +93,7 @@
   }
   
   .navbar__links:hover {
-    color: #9518fc;
+    color: #289ae6;
     transition: all 0.3s ease;
   }
   
@@ -219,13 +220,13 @@
     background: #ee0979; /* fallback for old browsers */
     background: -webkit-linear-gradient(
       to right,
-      #ff6a00,
-      #ee0979
+      #055494,
+      #30face
     ); /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(
       to right,
-      #ff6a00,
-      #ee0979
+      #055494,
+      #30face
     ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background-size: 100%;
     -webkit-background-clip: text;
@@ -239,13 +240,13 @@
     background: #da22ff; /* fallback for old browsers */
     background: -webkit-linear-gradient(
       to right,
-      #9114ff,
-      #da22ff
+      #806e0c,
+      #3a9c0c
     ); /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(
       to right,
-      #8f0eff,
-      #da22ff
+      #806e0c,
+      #3a9c0c
     ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background-size: 100%;
     -webkit-background-clip: text;
@@ -255,7 +256,7 @@
   }
   
   .highlight {
-    border-bottom: 4px solid rgb(132, 0, 255);
+    border-bottom: 4px solid rgb(98, 0, 255);
   }
   
   @media screen and (max-width: 768px) {
@@ -305,18 +306,20 @@
     margin-bottom: 32px;
   }
   
-  .main__content h2 {
-    font-size: 4rem;
-    background: #ff8177; /* fallback for old browsers */
+  .main__content h2
+  {  
+    font-size: 5rem !important;
+    color:#cbd9db;
+    background: #da22ff; /* fallback for old browsers */
     background: -webkit-linear-gradient(
       to right,
-      #9114ff,
-      #da22ff
+      #055494,
+      #30face
     ); /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(
       to right,
-      #8f0eff,
-      #da22ff
+      #055494,
+      #30face
     ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background-size: 100%;
     -webkit-background-clip: text;
@@ -373,32 +376,14 @@
     width: 100%;
   }
   
-  .main__img--container {
-    text-align: center;
-  }
   
-  .main__img--card {
-    margin: 10px;
-    height: 500px;
-    width: 500px;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: #fff;
-    background-image: linear-gradient(to right, #00dbde 0%, #144999 100%);
-  }
   
   .fa-layer-group,
   .fa-users {
     font-size: 14rem;
   }
   
-  #card-2 {
-    background: #ff512f;
-    background: -webkit-linear-gradient(to right, #2534be, #88aa38);
-    background: linear-gradient(to right, #26b86f, #e0761f);
-  }
+  
   
   /* Mobile Responsive */
   @media screen and (max-width: 1100px) {
@@ -412,15 +397,7 @@
       height: 90%;
     }
   
-    .main__img--container {
-      display: flex;
-      justify-content: center;
-    }
   
-    .main__img--card {
-      height: 425px;
-      width: 425px;
-    }
   
     .main__content {
       text-align: center;
@@ -434,6 +411,7 @@
   
     .main__content h2 {
       font-size: 3rem;
+      
     }
   
     .main__content p {
@@ -442,34 +420,6 @@
     }
   }
   
-  @media screen and (max-width: 480px) {
-    .main__img--card {
-      width: 250px;
-      height: 250px;
-    }
-  
-    .fa-users,
-    .fa-layer-group {
-      font-size: 4rem;
-    }
-  
-    .main__content h1 {
-      font-size: 2rem;
-      margin-top: 3rem;
-    }
-    .main__content h2 {
-      font-size: 2rem;
-    }
-  
-    .main__content p {
-      margin-top: 2rem;
-    }
-  
-    .main__btn {
-      padding: 12px 36px;
-      margin: 2.5rem 0;
-    }
-  }
   
   /* Services Section */
   .services {
@@ -500,92 +450,8 @@
     grid-template-rows: 1fr;
   }
   
-  .services__card {
-    margin: 10px;
-    height: 425px;
-    width: 300px;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: #fff;
-    background-image: linear-gradient(to right, #00dbde 0%, #fc00ff 100%);
-    transition: 0.3s ease-in;
-  }
   
-  .services__card:nth-child(2) {
-    background: #1fa2ff; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-      to right,
-      #a6ffcb,
-      #12d8fa,
-      #1fa2ff
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-      to right,
-      #a6ffcb,
-      #12d8fa,
-      #1fa2ff
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  }
   
-  .services__card:nth-child(3) {
-    background-image: linear-gradient(
-      -225deg,
-      #231557 0%,
-      #44107a 29%,
-      #08b3d1 67%,
-      #fff800 100%
-    );
-  }
-  
-  .services__card h2 {
-    text-align: center;
-  }
-  
-  .services__card p {
-    text-align: center;
-    margin-top: 24px;
-    font-size: 20px;
-  }
-  
-  .services__btn {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
-  }
-  
-  .services__card button {
-    color: #fff;
-    padding: 14px 24px;
-    border: none;
-    outline: none;
-    border-radius: 4px;
-    background: #131313;
-    font-size: 1rem;
-  }
-  
-  .services__card button:hover {
-    cursor: pointer;
-  }
-  
-  .services__card:hover {
-    transform: scale(1.075);
-    transition: 0.3s ease-in;
-    cursor: pointer;
-  }
-  
-  @media screen and (max-width: 1300px) {
-    .services__wrapper {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  
-  @media screen and (max-width: 768px) {
-    .services__wrapper {
-      grid-template-columns: 1fr;
-    }
-  }
   
   /* Footer CSS */
   .footer__container {
@@ -603,7 +469,7 @@
     align-items: center;
     cursor: pointer;
     text-decoration: none;
-    font-size: 2rem;
+    font-size: 4rem;
   }
   
   .footer__links {
@@ -684,7 +550,7 @@
     }
   
     .website__rights {
-      margin-bottom: 2rem;
+      margin-bottom: 3.5rem;
     }
   
     .footer__link--wrapper {
@@ -703,3 +569,75 @@
       width: 100%;
     }
   }
+
+  /* S styles */
+  body {
+    background: linear-gradient(to right, #161616, #000000) !important;
+  }
+  .mycontainers {
+    /*width:80% !important;*/
+    margin:auto;
+  }
+  .form-inline .form-group {
+    display: block !important;
+    margin-top:30px;
+  }
+  .mycontainers label {
+    width:15%;
+font-size: 30px;
+color:#cbd9db;
+
+    background: #da22ff; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to right,
+      #055494,
+      #30face
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to right,
+      #055494,
+      #30face
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+  }
+
+  
+  .mycontainers input[type="radio"] {
+    transform:scale(2);
+  }
+  .mycontainers input[type="text"],
+  .mycontainers select {
+    width:84% !important;
+    
+  }
+  .right {
+    float:right;
+    margin-top:30px;
+    margin-right:10px;
+
+  }
+
+  .btn-default{
+    color: #fff !important;
+    background-color: #100 !important;
+    border-color: #160a0a !important;
+    font-size: 2.6rem !important;
+    background: #833ab4 !important;
+    background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4) !important;
+    background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4) !important;
+    padding: 15px 40px !important;
+    border: none;
+    border-radius: 4px;
+    margin-top: 2rem;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.35s;
+    outline: none;
+  }
+
+ 
+ 
