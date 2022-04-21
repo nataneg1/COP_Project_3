@@ -1,45 +1,34 @@
-from flask import Flask, render_template
-import analyzeData, enum
-app = Flask(__name__)
+import analyzeData ,enum, verify
 
-@app.route('/')
-def home():
-    # TODO: Build Tree
-    list = []
-    return render_template("index.html")
-
-@app.route('/results')
-def result():
-    return "Hello World!"
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-# Enumeration for the user's choice of date
-# https://www.geeksforgeeks.org/enum-in-python/
-class Date(enum.Enum):
+class DateRange(enum.Enum):
     day = 1
     week = 2
     month = 3
     year = 4
 
 
-'''
-From Front End:
-    1. Ticker Name
-    2. Gain or Loss
-    3. Date: Daily, Weekly, Monthly, or Yearly
-'''
-# TODO: Define Tree Class
+list = [] 
+name = str(input("Name Of Ticker: "))
+list.append(name)
 
-def buildTree():
-    # iterate through tickers and insert node in alphabetical order
-    # https://www.geeksforgeeks.org/how-to-iterate-over-files-in-directory-using-python/
-    return
+date = str(input("Choose date option: Daily, Weekly, Monthly, or Yearly: "))
+if date == "Daily":
+    list.append(1)
+elif date == "Weekly":
+    list.append(2)
+elif date == "Monthly":
+    list.append(3)
+elif date == "Yearly":
+    list.append(4)
 
-def tickerExists(tickerName):
-    return False
-    #use tree to find ticker name. if present
-        # return true
-    # else
-        #return false
+option = str(input("Gain or Loss: ")) 
+if option == "Gain":
+    list.append(1)
+elif option == "Loss":
+    list.append(0)
+
+
+if verify.tickerExists(str(list[0])) == True:
+    analyzeData.getTopFive(int(list[1]), int(list[2]), str(list[0]))
+else:
+    print("Ticker does not exist")
